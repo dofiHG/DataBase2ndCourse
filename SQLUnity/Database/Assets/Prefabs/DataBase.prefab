@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 8189437814769581236}
   - component: {fileID: 5008978020876788025}
   - component: {fileID: 7073206016938986440}
+  - component: {fileID: 8205033593401822752}
   m_Layer: 5
   m_Name: DataBase
-  m_TagString: Untagged
+  m_TagString: DBName
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,7 +121,34 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5008978020876788025}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8205033593401822752}
+        m_TargetAssemblyTypeName: OpenTableLines, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8205033593401822752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2163864411597964382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2839787c81ee1d4faf2f0d7fb7bafa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _namesCols: []
+  _prefab: {fileID: 9215291870417297944, guid: a8046f046dbb8ff498abb6348226575d, type: 3}
+  _tableName: 
 --- !u!1 &4658791706489797403
 GameObject:
   m_ObjectHideFlags: 0

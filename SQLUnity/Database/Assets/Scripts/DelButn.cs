@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityNpgsql;
 
-public class AddBtn : MonoBehaviour
+public class DelButn : MonoBehaviour
 {
     [SerializeField] private GameObject _panel;
     [SerializeField] private GameObject _prefab;
@@ -14,10 +12,9 @@ public class AddBtn : MonoBehaviour
 
     private void Start() => _connection = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Connection>();
 
-    public void Click() => _panel.SetActive(true);
-
-    public void AddNamesToArray()
+    public void OpenDelPanel()
     {
+        _panel.SetActive(true);
         foreach (Transform child in _content) { Destroy(child.gameObject); }
         var cmd = new NpgsqlCommand("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';", _connection.connection);
         var reader = cmd.ExecuteReader();

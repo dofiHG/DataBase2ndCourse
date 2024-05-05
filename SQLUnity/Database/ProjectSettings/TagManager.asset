@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - StartPanel
+  - InputFields
+  - DBName
+  - AddBtn
+  - DelScrollView
   layers:
   - Default
   - TransparentFX
