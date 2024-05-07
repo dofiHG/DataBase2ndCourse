@@ -9,6 +9,7 @@ TagManager:
   - DBName
   - AddBtn
   - DelScrollView
+  - InfoContent
   layers:
   - Default
   - TransparentFX

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityNpgsql;
 
 public class Connection : MonoBehaviour

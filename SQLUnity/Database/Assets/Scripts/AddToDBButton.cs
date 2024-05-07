@@ -8,8 +8,10 @@ public class AddToDBButton : MonoBehaviour
 {
     private Connection _connection;
     private Dictionary<string, string> _hashTable = new Dictionary<string, string>();
-    public GameObject _inputFieldArea;
+    private List<string> _names = new List<string>();
+    private List<string> _values = new List<string>();
 
+    public GameObject _inputFieldArea;
     public OpenTableLines _openTableLines;
 
     private void Start()
@@ -27,28 +29,25 @@ public class AddToDBButton : MonoBehaviour
             i++;
             if (inputField != null)
             {
-                string value = inputField.text;
-                _hashTable.Add(_openTableLines._namesCols[i], value);
+                _names.Add(_openTableLines._namesCols[i]);
+
+                try
+                {
+                    int convInt = Convert.ToInt32(inputField.text);
+                    _values.Add(inputField.text);
+                }
+                catch
+                {
+                    _values.Add($"'{inputField.text}'");
+                }
+                
             }
         }
 
-        foreach (string key in _hashTable.Keys)
-        {
-            try
-            {
-                int value = Convert.ToInt32(_hashTable[key]);
-                var cmd = new NpgsqlCommand($"INSERT INTO {_openTableLines._tableName} ({key}) VALUES ({value})", _connection.connection);
-                Debug.Log(_openTableLines._tableName);
-                Debug.Log($"{key}   {value}");
-            }
-            catch 
-            {
-                string value = _hashTable[key];
-                var cmd = new NpgsqlCommand($"INSERT INTO {_openTableLines._tableName} ({key}) VALUES ({value})", _connection.connection);
-                Debug.Log(_openTableLines._tableName);
-                Debug.Log($"{key}   {value}");
-            }
-            
-        }
+        string colums = string.Join(",", _names.ToArray());
+        string values = string.Join(",", _values.ToArray());
+
+        var cmd = new NpgsqlCommand($"INSERT INTO {_openTableLines._tableName} ({colums}) VALUES ({values})", _connection.connection);
+        cmd.ExecuteNonQuery();
     }
 }

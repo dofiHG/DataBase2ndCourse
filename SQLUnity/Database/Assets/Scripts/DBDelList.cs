@@ -10,6 +10,7 @@ public class DBDelList : MonoBehaviour
     public TMP_Text _warningText;
     public TMP_Text _whatDelText;
     public TMP_InputField _inputField;
+    public string tableName;
 
     private void Start()
     {
@@ -24,7 +25,7 @@ public class DBDelList : MonoBehaviour
         _warningText.enabled = true;
         _whatDelText.enabled = true;
         _inputField.image.enabled = true;
-        string tableName = gameObject.GetComponentInChildren<TMP_Text>().text;
+        tableName = gameObject.GetComponentInChildren<TMP_Text>().text;
 
         var cmd = new NpgsqlCommand(@$"
                 SELECT
@@ -41,6 +42,6 @@ public class DBDelList : MonoBehaviour
                     AND pg_constraint.conrelid = '{tableName}'::regclass;", _connection.connection);
 
         var reader = cmd.ExecuteReader();
-        while (reader.Read()) { Debug.Log(reader.GetString(1)); _whatDelText.text = $"¬ведите {reader.GetString(1)}"; }
+        while (reader.Read()) {_whatDelText.text = $"¬ведите {reader.GetString(1)}"; }
     }
 }

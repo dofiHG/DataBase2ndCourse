@@ -35,7 +35,4 @@ public class PanelBtns : MonoBehaviour
         catch (Exception exc) { _exeptionText.text = exc.Message; OpenWarningPanel(); Debug.Log(exc.Message); }
     }
     public void Exit() => Application.Quit();
-
-
-
 }
