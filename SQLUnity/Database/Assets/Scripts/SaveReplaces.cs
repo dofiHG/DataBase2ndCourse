@@ -15,6 +15,8 @@ public class SaveReplaces : MonoBehaviour
     public string _tablNa;
     public Transform _infoContent;
     public Transform _header;
+    public GameObject _exptPanel;
+    public TMP_Text _exeptionText;
 
     private void Start()
     {
@@ -23,71 +25,81 @@ public class SaveReplaces : MonoBehaviour
 
     public void Replace()
     {
-        _values.Clear();
-        _names.Clear();
-        foreach (Transform child in _header.transform)
+        try
         {
-            _names.Add(child.gameObject.GetComponent<TMP_Text>().text);
-        }
-
-        
-
-        int i = -1;
-        foreach (Transform child in _infoContent.transform)
-        {
-            TMP_InputField inputField = child.GetComponent<TMP_InputField>();
-            i++;
-            if (inputField.text.Length != 0)
+            _values.Clear();
+            _names.Clear();
+            foreach (Transform child in _header.transform)
             {
-                try
+                _names.Add(child.gameObject.GetComponent<TMP_Text>().text);
+            }
+
+
+
+            int i = -1;
+            foreach (Transform child in _infoContent.transform)
+            {
+                TMP_InputField inputField = child.GetComponent<TMP_InputField>();
+                i++;
+                if (inputField.text.Length != 0)
                 {
-                    int convInt = Convert.ToInt32(inputField.text);
-                    _values.Add(inputField.text);
+                    try
+                    {
+                        int convInt = Convert.ToInt32(inputField.text);
+                        _values.Add(inputField.text);
+                    }
+                    catch
+                    {
+                        _values.Add($"'{inputField.text}'");
+                    }
                 }
-                catch
+                else
                 {
-                    _values.Add($"'{inputField.text}'");
+                    try
+                    {
+                        int convInt = Convert.ToInt32(inputField.transform.Find("Text Area").Find("Placeholder").GetComponent<TMP_Text>().text);
+                        _values.Add(inputField.transform.Find("Text Area").Find("Placeholder").GetComponent<TMP_Text>().text);
+                    }
+                    catch
+                    {
+                        _values.Add($"'{inputField.transform.Find("Text Area").Find("Placeholder").GetComponent<TMP_Text>().text}'");
+                    }
                 }
             }
-            else
+
+            string pkName = "";
+            List<string> pkVal = new List<string>();
+            pkVal.Clear();
+
+            var cmd = new NpgsqlCommand("SELECT a.attname AS column_name " +
+                                        "FROM pg_index i  " +
+                                        "JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)" +
+                                        $"WHERE i.indrelid = '{_tablNa}'::regclass AND i.indisprimary;", _connection.connection);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read()) { pkName = reader.GetString(0); }
+            reader.Close();
+
+            cmd = new NpgsqlCommand($"SELECT {pkName} FROM {_tablNa};", _connection.connection);
+            reader = cmd.ExecuteReader();
+            while (reader.Read()) { pkVal.Add(Convert.ToString(reader[0])); }
+            reader.Close();
+
+            for (int j = 0; j < pkVal.Count; j++)
             {
-                try
+                for (int k = 0; k < _names.Count; k++)
                 {
-                    int convInt = Convert.ToInt32(inputField.transform.Find("Text Area").Find("Placeholder").GetComponent<TMP_Text>().text);
-                    _values.Add(inputField.transform.Find("Text Area").Find("Placeholder").GetComponent<TMP_Text>().text);
-                }
-                catch
-                {
-                    _values.Add($"'{inputField.transform.Find("Text Area").Find("Placeholder").GetComponent<TMP_Text>().text}'");
+                    cmd = new NpgsqlCommand($"UPDATE {_tablNa} SET {_names[k]} = {_values[0]} WHERE {pkName} = {pkVal[j]}", _connection.connection);
+                    cmd.ExecuteNonQuery();
+                    _values.RemoveAt(0);
                 }
             }
         }
 
-        string pkName = "";
-        List<string> pkVal = new List<string>();
-        pkVal.Clear();
-
-        var cmd = new NpgsqlCommand("SELECT a.attname AS column_name " +
-                                    "FROM pg_index i  " +
-                                    "JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)" +
-                                    $"WHERE i.indrelid = '{_tablNa}'::regclass AND i.indisprimary;", _connection.connection);
-        var reader = cmd.ExecuteReader();
-        while(reader.Read()) { pkName =  reader.GetString(0); } reader.Close();
-        
-        cmd = new NpgsqlCommand($"SELECT {pkName} FROM {_tablNa};", _connection.connection);
-        reader = cmd.ExecuteReader();
-        while (reader.Read()) { pkVal.Add(Convert.ToString(reader[0])); } reader.Close();
-
-        for (int j = 0; j < pkVal.Count; j++)
+        catch (Exception exc)
         {
-            for (int k = 0; k < _names.Count; k++)
-            {
-                cmd = new NpgsqlCommand($"UPDATE {_tablNa} SET {_names[k]} = {_values[0]} WHERE {pkName} = {pkVal[j]}", _connection.connection);
-                cmd.ExecuteNonQuery();
-                _values.RemoveAt(0);
-            }
+            _exeptionText.text = exc.Message;
+            _exptPanel.gameObject.SetActive(true);
         }
-        
 
     } 
 }

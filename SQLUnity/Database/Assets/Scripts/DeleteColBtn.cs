@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityNpgsql;
@@ -8,6 +9,8 @@ public class DeleteColBtn : MonoBehaviour
     private DBDelList _delList;
 
     public TMP_InputField _inputField;
+    public GameObject _exptPanel;
+    public TMP_Text _exeptionText;
 
     private void Start()
     {
@@ -17,8 +20,17 @@ public class DeleteColBtn : MonoBehaviour
 
     public void DeleteCol()
     {
-        var cmd = new NpgsqlCommand($"DELETE FROM {_delList.tableName} WHERE {_delList._whatDelText.text.Substring(8)} = @Value", _connection.connection);
-        cmd.Parameters.AddWithValue("@Value ", _inputField.text);
-        cmd.ExecuteNonQuery();
+        try
+        {
+            var cmd = new NpgsqlCommand($"DELETE FROM {_delList.tableName} WHERE {_delList._whatDelText.text.Substring(8)} = @Value", _connection.connection);
+            cmd.Parameters.AddWithValue("@Value ", _inputField.text);
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception exc)
+        {
+            _exeptionText.text = exc.Message;
+            _exptPanel.gameObject.SetActive(true);
+        }
+
     }
 }

@@ -13,6 +13,8 @@ public class AddToDBButton : MonoBehaviour
 
     public GameObject _inputFieldArea;
     public OpenTableLines _openTableLines;
+    public GameObject _exptPanel;
+    public TMP_Text _exeptionText;
 
     private void Start()
     {
@@ -22,32 +24,41 @@ public class AddToDBButton : MonoBehaviour
 
     public void ClickToAdd()
     {
-        int i = -1;
-        foreach (Transform child in _inputFieldArea.transform)
+        try
         {
-            TMP_InputField inputField = child.GetComponent<TMP_InputField>();
-            i++;
-            if (inputField != null)
+            int i = -1;
+            foreach (Transform child in _inputFieldArea.transform)
             {
-                _names.Add(_openTableLines._namesCols[i]);
+                TMP_InputField inputField = child.GetComponent<TMP_InputField>();
+                i++;
+                if (inputField != null)
+                {
+                    _names.Add(_openTableLines._namesCols[i]);
 
-                try
-                {
-                    int convInt = Convert.ToInt32(inputField.text);
-                    _values.Add(inputField.text);
+                    try
+                    {
+                        int convInt = Convert.ToInt32(inputField.text);
+                        _values.Add(inputField.text);
+                    }
+                    catch
+                    {
+                        _values.Add($"'{inputField.text}'");
+                    }
+
                 }
-                catch
-                {
-                    _values.Add($"'{inputField.text}'");
-                }
-                
             }
+
+            string colums = string.Join(",", _names.ToArray());
+            string values = string.Join(",", _values.ToArray());
+
+            var cmd = new NpgsqlCommand($"INSERT INTO {_openTableLines._tableName} ({colums}) VALUES ({values})", _connection.connection);
+            cmd.ExecuteNonQuery();
         }
 
-        string colums = string.Join(",", _names.ToArray());
-        string values = string.Join(",", _values.ToArray());
-
-        var cmd = new NpgsqlCommand($"INSERT INTO {_openTableLines._tableName} ({colums}) VALUES ({values})", _connection.connection);
-        cmd.ExecuteNonQuery();
+        catch (Exception exc)
+        {
+            _exeptionText.text = exc.Message;
+            _exptPanel.gameObject.SetActive(true);
+        }
     }
 }
