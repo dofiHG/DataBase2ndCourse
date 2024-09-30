@@ -59,7 +59,9 @@ public class SpawnHeaders : MonoBehaviour
         reader.Close();
     }
 
-    public void ShowInformation()
+    public void ShowInfo() => ShowInformation();
+
+    public void ShowInformation(string colName = "", string method = "")
     {
         foreach (Transform child in _infoContent) { Destroy(child.gameObject); }
 
@@ -71,7 +73,13 @@ public class SpawnHeaders : MonoBehaviour
         rt.sizeDelta = new Vector2(150, rt.sizeDelta.y);
         rt.sizeDelta = new Vector2(rt.sizeDelta.x * columnCount + 20, rt.sizeDelta.y);
 
-        cmd = new NpgsqlCommand($"SELECT * FROM {_tableName}", _connection.connection);
+        if (method == "")
+            cmd = new NpgsqlCommand($"SELECT * FROM {_tableName}", _connection.connection);
+        else if (method == "MinToMax")
+            cmd = new NpgsqlCommand($"SELECT * FROM {_tableName} ORDER BY {colName} ASC", _connection.connection);
+        else if (method == "MaxToMin")
+            cmd = new NpgsqlCommand($"SELECT * FROM {_tableName} ORDER BY {colName} DESC", _connection.connection);
+
         var reader = cmd.ExecuteReader();
         
         _glg.constraintCount = columnCount;

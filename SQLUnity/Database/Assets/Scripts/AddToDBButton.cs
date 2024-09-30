@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityNpgsql;
 
 public class AddToDBButton : MonoBehaviour
@@ -53,6 +55,8 @@ public class AddToDBButton : MonoBehaviour
 
             var cmd = new NpgsqlCommand($"INSERT INTO {_openTableLines._tableName} ({colums}) VALUES ({values})", _connection.connection);
             cmd.ExecuteNonQuery();
+            gameObject.GetComponent<Image>().color = new Color32(140, 255, 129, 255);
+            StartCoroutine(Delay());
         }
 
         catch (Exception exc)
@@ -60,5 +64,11 @@ public class AddToDBButton : MonoBehaviour
             _exeptionText.text = exc.Message;
             _exptPanel.gameObject.SetActive(true);
         }
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(2f);
+        gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
     }
 }

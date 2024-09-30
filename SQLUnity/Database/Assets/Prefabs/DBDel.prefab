@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 1398200274402781338}
   - component: {fileID: 1446004036280736847}
   - component: {fileID: 553923033821979971}
+  - component: {fileID: -920302598573408041}
   m_Layer: 5
   m_Name: DBDel
   m_TagString: DBName
@@ -268,6 +269,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: -920302598573408041}
+        m_TargetAssemblyTypeName: PaintButton, Assembly-CSharp
+        m_MethodName: PaintBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &553923033821979971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,3 +296,16 @@ MonoBehaviour:
   _warningText: {fileID: 0}
   _whatDelText: {fileID: 0}
   _inputField: {fileID: 0}
+  tableName: 
+--- !u!114 &-920302598573408041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2385904693248951641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b2718735a1710419293f5316dd5e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -12,7 +12,15 @@ public class ShowBtn : MonoBehaviour
 
     private void Start() => _connection = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Connection>();
 
-    public void Click() => _panel.SetActive(true);
+    public void Click()
+    {
+        _panel.SetActive(true);
+        foreach (Transform header in _panel.transform.Find("Scroll View").transform.Find("Header"))
+            Destroy(header.gameObject);
+
+        foreach (Transform inputField in _panel.transform.Find("Scroll View").transform.Find("Information").transform.Find("Viewport").transform.Find("Content"))
+            Destroy(inputField.gameObject);
+    }
 
     public void AddNamesToArray()
     {

@@ -39,6 +39,5 @@ public class Connection : MonoBehaviour
             _exeptionText.text = exc.Message;
             _exptPanel.gameObject.SetActive(true);
         }
-        
     }
 }

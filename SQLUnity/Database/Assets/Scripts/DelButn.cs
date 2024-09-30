@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityNpgsql;
 
 public class DelButn : MonoBehaviour
@@ -14,6 +15,9 @@ public class DelButn : MonoBehaviour
 
     public void OpenDelPanel()
     {
+        _panel.transform.Find("WarningText").GetComponent<TMP_Text>().enabled = false;
+        _panel.transform.Find("WhatDeleteText").GetComponent<TMP_Text>().enabled = false;
+        _panel.transform.Find("DelInputField").GetComponent<Image>().enabled = false;
         _panel.SetActive(true);
         foreach (Transform child in _content) { Destroy(child.gameObject); }
         var cmd = new NpgsqlCommand("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';", _connection.connection);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using TMPro;
@@ -76,6 +77,8 @@ public class SaveReplaces : MonoBehaviour
                                         "JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)" +
                                         $"WHERE i.indrelid = '{_tablNa}'::regclass AND i.indisprimary;", _connection.connection);
             var reader = cmd.ExecuteReader();
+            gameObject.GetComponent<Image>().color = new Color32(140, 255, 129, 255);
+            StartCoroutine(Delay());
             while (reader.Read()) { pkName = reader.GetString(0); }
             reader.Close();
 
@@ -101,5 +104,12 @@ public class SaveReplaces : MonoBehaviour
             _exptPanel.gameObject.SetActive(true);
         }
 
-    } 
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(2f);
+        gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+
+    }
 }

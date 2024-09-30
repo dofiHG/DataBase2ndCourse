@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityNpgsql;
 
 public class DeleteColBtn : MonoBehaviour
@@ -25,6 +27,9 @@ public class DeleteColBtn : MonoBehaviour
             var cmd = new NpgsqlCommand($"DELETE FROM {_delList.tableName} WHERE {_delList._whatDelText.text.Substring(8)} = @Value", _connection.connection);
             cmd.Parameters.AddWithValue("@Value ", _inputField.text);
             cmd.ExecuteNonQuery();
+            gameObject.GetComponent<Image>().color = new Color32(140, 255, 129, 255);
+            StartCoroutine(Delay());
+
         }
         catch (Exception exc)
         {
@@ -32,5 +37,11 @@ public class DeleteColBtn : MonoBehaviour
             _exptPanel.gameObject.SetActive(true);
         }
 
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(2f);
+        gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
     }
 }

@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityNpgsql;
 
 public class AddBtn : MonoBehaviour
@@ -14,7 +12,12 @@ public class AddBtn : MonoBehaviour
 
     private void Start() => _connection = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Connection>();
 
-    public void Click() => _panel.SetActive(true);
+    public void Click()
+    {
+        _panel.SetActive(true);
+        foreach (Transform inputField in _panel.transform.Find("InputFields"))
+            Destroy(inputField.gameObject);
+    }
 
     public void AddNamesToArray()
     {
