@@ -1,17 +1,17 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityNpgsql;
 
 public class Connection : MonoBehaviour
 {
-    private PanelBtns _panelBtns;
-
     public GameObject _exptPanel;
     public TMP_Text _exeptionText;
-
-    private void Start() => _panelBtns = GameObject.FindGameObjectWithTag("StartPanel").GetComponent<PanelBtns>();
+    public GameObject panelToClose;
+    public TMP_InputField username;
+    public TMP_InputField host;
+    public TMP_InputField password;
+    public TMP_InputField DBName;
 
     public NpgsqlConnection connection;
 
@@ -24,15 +24,20 @@ public class Connection : MonoBehaviour
     {
         try
         {
-            _hostText = _panelBtns._host.text;
-            _usernameText = _panelBtns._username.text;
-            _passwordText = _panelBtns._password.text;
-            _dbnameText = _panelBtns._dbName.text;
+            _hostText = host.text;
+            _usernameText = username.text;
+            _passwordText = password.text;
+            _dbnameText = DBName.text;
+            /*_hostText = "localhost";
+            _usernameText = "postgres";
+            _passwordText = "root";
+            _dbnameText = "mydb";*/
 
             string connectionString = $"Server={_hostText}; Database={_dbnameText}; User Id={_usernameText}; Password={_passwordText};";
             connection = new NpgsqlConnection(connectionString);
             connection.Open();
-            _panelBtns._panelStart.SetActive(false);
+            panelToClose.SetActive(false);
+
         }
         catch (Exception exc)
         {

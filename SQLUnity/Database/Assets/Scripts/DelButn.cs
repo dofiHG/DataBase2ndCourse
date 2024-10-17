@@ -8,6 +8,7 @@ public class DelButn : MonoBehaviour
     [SerializeField] private GameObject _panel;
     [SerializeField] private GameObject _prefab;
     [SerializeField] private Transform _content;
+    [SerializeField] private Transform _closePanel2;
 
     private Connection _connection;
 
@@ -15,7 +16,6 @@ public class DelButn : MonoBehaviour
 
     public void OpenDelPanel()
     {
-        _panel.transform.Find("WarningText").GetComponent<TMP_Text>().enabled = false;
         _panel.transform.Find("WhatDeleteText").GetComponent<TMP_Text>().enabled = false;
         _panel.transform.Find("DelInputField").GetComponent<Image>().enabled = false;
         _panel.SetActive(true);
@@ -28,5 +28,7 @@ public class DelButn : MonoBehaviour
             obj.GetComponentInChildren<TMP_Text>().text = reader.GetString(0);
         }
         reader.Close();
+        foreach (Transform child in _closePanel2)
+            child.gameObject.SetActive(false);
     }
 }

@@ -7,6 +7,7 @@ public class ShowBtn : MonoBehaviour
     [SerializeField] private GameObject _panel;
     [SerializeField] private GameObject _prefab;
     [SerializeField] private Transform _content;
+    [SerializeField] private Transform _closePanel2;
 
     private Connection _connection;
 
@@ -15,7 +16,7 @@ public class ShowBtn : MonoBehaviour
     public void Click()
     {
         _panel.SetActive(true);
-        foreach (Transform header in _panel.transform.Find("Scroll View").transform.Find("Header"))
+        foreach (Transform header in _panel.transform.Find("Scroll View").transform.Find("Header").Find("Viewport").Find("Content"))
             Destroy(header.gameObject);
 
         foreach (Transform inputField in _panel.transform.Find("Scroll View").transform.Find("Information").transform.Find("Viewport").transform.Find("Content"))
@@ -33,5 +34,7 @@ public class ShowBtn : MonoBehaviour
             obj.GetComponentInChildren<TMP_Text>().text = reader.GetString(0);
         }
         reader.Close();
+        foreach (Transform child in _closePanel2)
+            child.gameObject.SetActive(false);
     }
 }

@@ -17,10 +17,8 @@ public class SortButtons : MonoBehaviour
         GameObject current = null;
         GameObject[] buttons = GameObject.FindGameObjectsWithTag("DBName");
         foreach (GameObject button in buttons)
-            if (button.GetComponent<Image>().color == new Color32(255, 184, 239, 255))
-            {
-                current = button;
-            }
+        if (button.GetComponent<Image>().color == new Color32(136, 255, 165, 255))
+            current = button;
 
         current.GetComponent<SpawnHeaders>().ShowInformation(colName, "MinToMax");
     }
@@ -33,10 +31,8 @@ public class SortButtons : MonoBehaviour
         GameObject current = null;
         GameObject[] buttons = GameObject.FindGameObjectsWithTag("DBName");
         foreach (GameObject button in buttons)
-            if (button.GetComponent<Image>().color == new Color32(255, 184, 239, 255))
-            {
-                current = button;
-            }
+        if (button.GetComponent<Image>().color == new Color32(136, 255, 165, 255))
+            current = button;
 
         current.GetComponent<SpawnHeaders>().ShowInformation(colName, "MaxToMin");
     }

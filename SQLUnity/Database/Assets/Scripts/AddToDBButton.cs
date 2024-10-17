@@ -69,6 +69,6 @@ public class AddToDBButton : MonoBehaviour
     IEnumerator Delay()
     {
         yield return new WaitForSeconds(2f);
-        gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        gameObject.GetComponent<Image>().color = new Color32(17, 136, 245, 255);
     }
 }

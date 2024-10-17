@@ -24,7 +24,7 @@ public class SpawnHeaders : MonoBehaviour
     private void Start()
     {
         _connection = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Connection>();
-        _panel = GameObject.Find("Header").GetComponentInParent<Transform>();
+        _panel = GameObject.Find("Header").GetComponentInParent<Transform>().Find("Viewport").Find("Content");
         _infoContent = GameObject.FindGameObjectWithTag("InfoContent").GetComponent<Transform>();
         _infoPanel = GameObject.Find("Information").GetComponent<Transform>();
         _glg = GameObject.FindGameObjectWithTag("InfoContent").GetComponent<GridLayoutGroup>();
@@ -55,6 +55,8 @@ public class SpawnHeaders : MonoBehaviour
         {
             GameObject obj = Instantiate(_prefab, _panel);
             obj.gameObject.GetComponent<TMP_Text>().text = reader.GetString(0);
+            obj.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 15);
+            //obj.transform.Find("SortBtn").SetActive(true);
         }
         reader.Close();
     }
@@ -65,13 +67,8 @@ public class SpawnHeaders : MonoBehaviour
     {
         foreach (Transform child in _infoContent) { Destroy(child.gameObject); }
 
-        RectTransform rt = _infoPanel.GetComponent<RectTransform>();
-
         var cmd = new NpgsqlCommand($"SELECT COUNT(*) FROM information_schema.columns WHERE table_name = '{_tableName}'", _connection.connection);
         int columnCount = Convert.ToInt32(cmd.ExecuteScalar());
-
-        rt.sizeDelta = new Vector2(150, rt.sizeDelta.y);
-        rt.sizeDelta = new Vector2(rt.sizeDelta.x * columnCount + 20, rt.sizeDelta.y);
 
         if (method == "")
             cmd = new NpgsqlCommand($"SELECT * FROM {_tableName}", _connection.connection);

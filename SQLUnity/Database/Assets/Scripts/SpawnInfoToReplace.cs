@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +29,7 @@ public class SpawnInfoToReplace : MonoBehaviour
 
     public void ShowHeaders()
     {
-        foreach (Transform child in _panel) { Destroy(child.gameObject); }
+        foreach (Transform child in _panel.Find("Viewport").Find("Content")) { Destroy(child.gameObject); }
         _tableName = gameObject.GetComponentInChildren<TMP_Text>().text;
 
         _saveRep._tablNa = _tableName;
@@ -54,8 +52,9 @@ public class SpawnInfoToReplace : MonoBehaviour
 
         while (reader.Read())
         {
-            GameObject obj = Instantiate(_prefab, _panel);
+            GameObject obj = Instantiate(_prefab, _panel.Find("Viewport").Find("Content"));
             obj.gameObject.GetComponent<TMP_Text>().text = reader.GetString(0);
+            obj.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 20);
         }
         reader.Close();
     }
@@ -64,13 +63,8 @@ public class SpawnInfoToReplace : MonoBehaviour
     {
         foreach (Transform child in _infoContent) { Destroy(child.gameObject); }
 
-        RectTransform rt = _infoPanel.GetComponent<RectTransform>();
-
         var cmd = new NpgsqlCommand($"SELECT COUNT(*) FROM information_schema.columns WHERE table_name = '{_tableName}'", _connection.connection);
         int columnCount = Convert.ToInt32(cmd.ExecuteScalar());
-
-        rt.sizeDelta = new Vector2(150, rt.sizeDelta.y);
-        rt.sizeDelta = new Vector2(rt.sizeDelta.x * columnCount + 20, rt.sizeDelta.y);
 
         cmd = new NpgsqlCommand($"SELECT * FROM {_tableName}", _connection.connection);
         var reader = cmd.ExecuteReader();
